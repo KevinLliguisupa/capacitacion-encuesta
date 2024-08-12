@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Preguntas</title>
+</h:head>
+
+<h:body>
+    <center>
+        <p:outputLabel value="Ingreso de preguntas" style="font-weight: bolder; font-size: 14px"/>
+    </center>
+</h:body>
+
+<h:form id="frmPreguntas">
+    <br/>
+    <p:commandButton value="Lista respuestas" icon="pi pi-list" action="respuestas.xhtml?faces-redirect=true"/>
+
+    <p:commandButton id="btn" type="button" value="Registrar pregunta" onclick="PF('dlg').show();" style="float: right"
+                     icon="pi pi-plus"/>
+    <br/><br/>
+
+    <p:dataTable id="dtPreguntas" value="${preguntaMB.preguntas}" var="p">
+        <p:column headerText="Tipo">
+            #{p.tipo}
+        </p:column>
+        <p:column headerText="Pregunta">
+            #{p.pregunta}
+        </p:column>
+        <p:column headerText="Requerida">
+            <p:outputLabel value="Si" rendered="#{p.requerida}"/>
+            <p:outputLabel value="No" rendered="#{!p.requerida}"/>
+        </p:column>
+        <p:column headerText="Estado">
+            #{p.estado}
+        </p:column>
+        <p:column headerText="Opciones">
+            <p:commandButton value="Editar" icon="pi pi-pencil" styleClass="rounded-button" style="margin-right: 5px"
+                             actionListener="#{preguntaMB.editarPregunta(p)}" oncomplete="PF('dlg').show();" update="frmPregunta"/>
+
+            <p:commandButton value="Responder" icon="pi pi-check-square" styleClass="rounded-button"
+                             actionListener="#{respuestaMB.responderPregunta(p)}" oncomplete="PF('dlgRespuesta').show();"
+                             style="background-color: green; margin-right: 5px" update="frmRespuesta"/>
+
+            <p:commandButton value="Respuestas" icon="pi pi-chart-line" styleClass="rounded-button ui-button-warning"
+                             action="#{preguntaRespuestaMB.seleccionarPregunta(p)}"/>
+        </p:column>
+    </p:dataTable>
+</h:form>
+
+<p:dialog id="gmapDialog" widgetVar="dlg" header="Registro de pregunta" width="550" modal="true">
+    <h:form id="frmPregunta">
+        <p:panelGrid columns="2">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <p:outputLabel value="Pregunta" style="float: left"/>
+                    <br/>
+                    <p:inputTextarea rows="5" value="#{preguntaMB.pregunta.pregunta}" style="width: 100%"/>
+                </h:panelGroup>
+            </f:facet>
+
+            <h:panelGroup>
+                <p:outputLabel value="Tipo de pregunta"/>
+                <br/>
+
+                <p:selectOneMenu value="#{preguntaMB.pregunta.tipo}" style="width: 100%">
+                    <f:selectItem itemLabel="Pregunta" itemValue="Pregunta"/>
+                    <f:selectItem itemLabel="Opcion multiple" itemValue="Opcion multiple"/>
+                    <f:selectItem itemLabel="Categorias" itemValue="Categorias"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <p:outputLabel value="Estado de pregunta"/>
+                <br/>
+
+                <p:selectOneMenu value="#{preguntaMB.pregunta.estado}" style="width: 100%">
+                    <f:selectItem itemLabel="Activo" itemValue="Activo"/>
+                    <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <p:outputLabel value="Es obligatorio"/>
+                <br/>
+
+                <p:selectBooleanCheckbox value="#{preguntaMB.pregunta.requerida}"/>
+            </h:panelGroup>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton value="Guardar" styleClass="rounded-button" style="background-color: green"
+                                     icon="pi pi-save" actionListener="#{preguntaMB.guardarPregunta()}"
+                                     onclick="PF('dlg').hide();" update="frmPreguntas"/>
+                    <p:spacer width="20"/>
+                    <p:commandButton value="Cancelar" styleClass="rounded-button" style="background-color: red"
+                                     icon="pi pi-times" onclick="PF('dlg').hide();"/>
+                </center>
+            </f:facet>
+        </p:panelGrid>
+    </h:form>
+</p:dialog>
+
+<p:dialog id="respDialog" widgetVar="dlgRespuesta" header="Registro de respuesta" width="550" modal="true">
+    <h:form id="frmRespuesta">
+        <p:panelGrid columns="2">
+            <f:facet name="header">
+                <h:panelGroup>
+                    <p:outputLabel value="#{respuestaMB.preguntaSeleccionada.pregunta}" style="float: left"/>
+                    <br/>
+                </h:panelGroup>
+            </f:facet>
+
+            <h:panelGroup>
+                <p:outputLabel value="Respuesta"/>
+                <br/>
+                <p:inputText value="#{respuestaMB.respuesta.respuesta}"/>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <p:outputLabel value="Calificacion"/>
+                <br/>
+
+                <p:inputNumber value="#{respuestaMB.respuesta.calificacion}"/>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <p:outputLabel value="Realizada"/>
+                <br/>
+
+                <p:selectBooleanCheckbox value="#{respuestaMB.respuesta.realizada}"/>
+            </h:panelGroup>
+            <f:facet name="footer">
+                <center>
+                    <p:commandButton value="Guardar" styleClass="rounded-button" style="background-color: green"
+                                     icon="pi pi-save" actionListener="#{respuestaMB.guardarRespuesta()}"
+                                     onclick="PF('dlgRespuesta').hide();"/>
+                    <p:spacer width="20"/>
+                    <p:commandButton value="Cancelar" styleClass="rounded-button" style="background-color: red"
+                                     icon="pi pi-times" onclick="PF('dlgRespuesta').hide();"/>
+                </center>
+            </f:facet>
+        </p:panelGrid>
+    </h:form>
+</p:dialog>
+</html>
