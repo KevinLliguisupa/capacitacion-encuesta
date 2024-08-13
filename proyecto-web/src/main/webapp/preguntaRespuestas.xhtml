@@ -26,21 +26,19 @@
 
 <h:form id="frmRespuestas">
     <br/>
-
-
-
     <p:dataTable id="dtRespuestas" value="${preguntaRespuestaMB.respuestas}" var="respuesta">
         <p:column headerText="Respuesta">
             #{respuesta.respuesta}
         </p:column>
+
         <p:column headerText="Calificacion">
             #{respuesta.calificacion}
         </p:column>
+
         <p:column headerText="Realizada">
             <p:outputLabel value="Si" rendered="#{respuesta.realizada}"/>
             <p:outputLabel value="No" rendered="#{!respuesta.realizada}"/>
         </p:column>
     </p:dataTable>
 </h:form>
-
 </html>

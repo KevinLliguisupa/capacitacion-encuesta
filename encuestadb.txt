@@ -1,0 +1,53 @@
+-- Table: aplicacion.pregunta
+
+-- DROP TABLE IF EXISTS aplicacion.pregunta;
+
+CREATE TABLE IF NOT EXISTS aplicacion.pregunta
+(
+    id bigint NOT NULL DEFAULT nextval('aplicacion.pregunta_id_seq'::regclass),
+    estado character varying COLLATE pg_catalog."default",
+    tipo character varying COLLATE pg_catalog."default",
+    pregunta character varying COLLATE pg_catalog."default",
+    requerida boolean,
+    usuario_registro character varying COLLATE pg_catalog."default",
+    usuario_modifica character varying COLLATE pg_catalog."default",
+    fecha_registro timestamp without time zone,
+    fecha_modifica timestamp without time zone,
+    CONSTRAINT pregunta_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS aplicacion.pregunta
+    OWNER to postgres;
+
+
+
+
+-- Table: aplicacion.pregunta_respuesta
+
+-- DROP TABLE IF EXISTS aplicacion.pregunta_respuesta;
+
+CREATE TABLE IF NOT EXISTS aplicacion.pregunta_respuesta
+(
+    id bigint NOT NULL DEFAULT nextval('aplicacion.pregunta_respuesta_id_seq'::regclass),
+    pregunta bigint,
+    realizada boolean,
+    respuesta character varying COLLATE pg_catalog."default",
+    calificacion integer,
+    persona bigint,
+    usuario_registro character varying COLLATE pg_catalog."default",
+    usuario_modifica character varying COLLATE pg_catalog."default",
+    fecha_registro timestamp without time zone,
+    fecha_modifica timestamp without time zone,
+    CONSTRAINT pregunta_respuesta_pkey PRIMARY KEY (id),
+    CONSTRAINT pregunta FOREIGN KEY (pregunta)
+        REFERENCES aplicacion.pregunta (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS aplicacion.pregunta_respuesta
+    OWNER to postgres;

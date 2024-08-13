@@ -20,6 +20,8 @@ public interface AppServices {
 
     public Object methodPOST(Object data, String url, Class clazz);
 
+    public Object methodPOST(String url, Class clazz);
+
     public List methodListPOST(Object data, String url, Class clazz);
 
 }

@@ -20,6 +20,9 @@
 
     <p:commandButton id="btn" type="button" value="Registrar pregunta" onclick="PF('dlg').show();" style="float: right"
                      icon="pi pi-plus"/>
+
+    <p:commandButton value="Crear encuesta" actionListener="#{preguntaMB.crearEncuesta()}"
+                     style="float: right; background-color: red" icon="pi pi-check"/>
     <br/><br/>
 
     <p:dataTable id="dtPreguntas" value="${preguntaMB.preguntas}" var="p">
@@ -41,7 +44,7 @@
                              actionListener="#{preguntaMB.editarPregunta(p)}" oncomplete="PF('dlg').show();" update="frmPregunta"/>
 
             <p:commandButton value="Responder" icon="pi pi-check-square" styleClass="rounded-button"
-                             actionListener="#{respuestaMB.responderPregunta(p)}" oncomplete="PF('dlgRespuesta').show();"
+                             actionListener="#{preguntaMB.responderPregunta(p)}" oncomplete="PF('dlgRespuesta').show();"
                              style="background-color: green; margin-right: 5px" update="frmRespuesta"/>
 
             <p:commandButton value="Respuestas" icon="pi pi-chart-line" styleClass="rounded-button ui-button-warning"
@@ -57,7 +60,7 @@
                 <h:panelGroup>
                     <p:outputLabel value="Pregunta" style="float: left"/>
                     <br/>
-                    <p:inputTextarea rows="5" value="#{preguntaMB.pregunta.pregunta}" style="width: 100%"/>
+                    <p:inputTextarea rows="5" value="#{preguntaMB.nuevaPregunta.pregunta}" style="width: 100%"/>
                 </h:panelGroup>
             </f:facet>
 
@@ -65,7 +68,7 @@
                 <p:outputLabel value="Tipo de pregunta"/>
                 <br/>
 
-                <p:selectOneMenu value="#{preguntaMB.pregunta.tipo}" style="width: 100%">
+                <p:selectOneMenu value="#{preguntaMB.nuevaPregunta.tipo}" style="width: 100%">
                     <f:selectItem itemLabel="Pregunta" itemValue="Pregunta"/>
                     <f:selectItem itemLabel="Opcion multiple" itemValue="Opcion multiple"/>
                     <f:selectItem itemLabel="Categorias" itemValue="Categorias"/>
@@ -76,7 +79,7 @@
                 <p:outputLabel value="Estado de pregunta"/>
                 <br/>
 
-                <p:selectOneMenu value="#{preguntaMB.pregunta.estado}" style="width: 100%">
+                <p:selectOneMenu value="#{preguntaMB.nuevaPregunta.estado}" style="width: 100%">
                     <f:selectItem itemLabel="Activo" itemValue="Activo"/>
                     <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
                 </p:selectOneMenu>
@@ -86,7 +89,7 @@
                 <p:outputLabel value="Es obligatorio"/>
                 <br/>
 
-                <p:selectBooleanCheckbox value="#{preguntaMB.pregunta.requerida}"/>
+                <p:selectBooleanCheckbox value="#{preguntaMB.nuevaPregunta.requerida}"/>
             </h:panelGroup>
             <f:facet name="footer">
                 <center>
@@ -107,7 +110,7 @@
         <p:panelGrid columns="2">
             <f:facet name="header">
                 <h:panelGroup>
-                    <p:outputLabel value="#{respuestaMB.preguntaSeleccionada.pregunta}" style="float: left"/>
+                    <p:outputLabel value="#{preguntaMB.preguntaSeleccionada.pregunta}" style="float: left"/>
                     <br/>
                 </h:panelGroup>
             </f:facet>
@@ -115,26 +118,26 @@
             <h:panelGroup>
                 <p:outputLabel value="Respuesta"/>
                 <br/>
-                <p:inputText value="#{respuestaMB.respuesta.respuesta}"/>
+                <p:inputText value="#{preguntaMB.respuesta.respuesta}"/>
             </h:panelGroup>
 
             <h:panelGroup>
                 <p:outputLabel value="Calificacion"/>
                 <br/>
 
-                <p:inputNumber value="#{respuestaMB.respuesta.calificacion}"/>
+                <p:inputNumber value="#{preguntaMB.respuesta.calificacion}"/>
             </h:panelGroup>
 
             <h:panelGroup>
                 <p:outputLabel value="Realizada"/>
                 <br/>
 
-                <p:selectBooleanCheckbox value="#{respuestaMB.respuesta.realizada}"/>
+                <p:selectBooleanCheckbox value="#{preguntaMB.respuesta.realizada}"/>
             </h:panelGroup>
             <f:facet name="footer">
                 <center>
                     <p:commandButton value="Guardar" styleClass="rounded-button" style="background-color: green"
-                                     icon="pi pi-save" actionListener="#{respuestaMB.guardarRespuesta()}"
+                                     icon="pi pi-save" actionListener="#{preguntaMB.guardarRespuesta()}"
                                      onclick="PF('dlgRespuesta').hide();"/>
                     <p:spacer width="20"/>
                     <p:commandButton value="Cancelar" styleClass="rounded-button" style="background-color: red"

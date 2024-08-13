@@ -95,6 +95,25 @@ public class AppEjb implements AppServices {
     }
 
     @Override
+    public Object methodPOST(String url, Class clazz) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            URI uri = new URI(url);
+            HttpEntity<Object> entity = new HttpEntity<>(headers);
+            ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.POST, entity, clazz);
+            if (response != null) {
+                return response.getBody();
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List methodListPOST(Object data, String url, Class clazz) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
